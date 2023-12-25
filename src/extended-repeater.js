@@ -20,18 +20,29 @@ const { NotImplementedError } = require('../extensions/index.js');
 
 
 function repeater(str, options) {
-
   let result = [];
 
-  for(let i = 0; i < (options.repeatTimes ? options.repeatTimes : 1); i = i + 1) {
-    result.push(str);
-    for(let j = 0; j < (options.additionRepeatTimes ? options.additionRepeatTimes: 1); j = j + 1) {
-    result.push(options.addition ? options.addition: "");
+  let repeatTimes = options.repeatTimes || 1;
+  let additionRepeatTimes = options.additionRepeatTimes || 1;
+
+  for (let i = 0; i < repeatTimes; i++) {
+    result.push(String(str)); // Преобразование в строку (null и undefined errors)
+
+    for (let j = 0; j < additionRepeatTimes; j++) {
+      if (options.addition !== undefined) { // тут тоже на всякий
+        result.push(String(options.addition));
+      }
+
+      if (j !== additionRepeatTimes - 1) {
+        result.push(options.additionSeparator ? options.additionSeparator : '|');
+      }
     }
-    if (i != options.repeatTimes - 1) {
-    result.push(options.separator ? options.separator : '+');
+
+    if (i !== repeatTimes - 1) {
+      result.push(options.separator ? options.separator : '+');
     }
   }
+
   return result.join("");
 }
 
